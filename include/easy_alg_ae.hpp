@@ -5,39 +5,61 @@
 #ifndef EASYALGAE_EASY_ALG_AE_HPP
 #define EASYALGAE_EASY_ALG_AE_HPP
 
+#include <cmath>
 #include <conio.h>
+#include <ctime>
 #include <easyx.h>
 #include <list>
+#include <random>
 
 namespace alg_ae {
 
 class SP_Graph;
+
 struct Range;
 struct Range2;
 struct Rect2;
 struct Pos2;
+/************************************/
+
+template <typename Ty> struct distribution_ {
+  virtual Ty uniform_distribution() const = 0;
+};
 
 /************************************/
-struct Range2 {
-  float top;
-  float bottom;
-  float left;
-  float right;
-  Rect2 to_rect2() const;
+struct Range : public distribution_<float> {
+  float min;
+  float max;
+  Range::Range(float a, float b) : min{a}, max{b} {}
+  Range() : Range(0, 1) {}
+  virtual float uniform_distribution() const override {
+    std::mt19937 mt;
+    std::uniform_real<float> u{0.0f, 1.0f};
+    float p = u(mt);
+    return this->min + p * (this->max - this->min);
+  };
 };
-
-struct Rect2 {
-  float top;
-  float bottom;
-  float width;
-  float height;
-  Range2 to_range2() const;
-};
-
-struct Pos2 {
-  float x;
-  float y;
-};
+//struct Range2 : public distribution_<Pos2> {
+//  float top;
+//  float bottom;
+//  float left;
+//  float right;
+//  Rect2 to_rect2() const;
+//};
+//
+//struct Rect2 : public distribution_<Pos2> {
+//  float top;
+//  float bottom;
+//  float width;
+//  float height;
+//  Range2 to_range2() const;
+//};
+//
+//struct Pos2 {
+//  float x;
+//  float y;
+//};
+/*********************************************/
 
 /**********************************************/
 
