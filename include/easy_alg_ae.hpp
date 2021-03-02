@@ -5,6 +5,7 @@
 #ifndef EASYALGAE_EASY_ALG_AE_HPP
 #define EASYALGAE_EASY_ALG_AE_HPP
 
+#include <atomic>
 #include <cmath>
 #include <conio.h>
 #include <ctime>
@@ -14,6 +15,22 @@
 
 namespace alg_ae {
 
+class Base_;
+/***********************************/
+
+class Base_ {
+  inline static std::atomic<long> g_{0};
+  long id_;
+
+public:
+  Base_() : id_{Base_::gen00()} {};
+  virtual long id() const { return id_; }
+
+public:
+  static long gen00() { return g_++; }
+};
+
+/*********************************************/
 class SP_Graph;
 
 struct Range;
@@ -39,7 +56,7 @@ struct Range : public distribution_<float> {
     return this->min + p * (this->max - this->min);
   };
 };
-//struct Range2 : public distribution_<Pos2> {
+// struct Range2 : public distribution_<Pos2> {
 //  float top;
 //  float bottom;
 //  float left;
@@ -47,7 +64,7 @@ struct Range : public distribution_<float> {
 //  Rect2 to_rect2() const;
 //};
 //
-//struct Rect2 : public distribution_<Pos2> {
+// struct Rect2 : public distribution_<Pos2> {
 //  float top;
 //  float bottom;
 //  float width;
@@ -55,7 +72,7 @@ struct Range : public distribution_<float> {
 //  Range2 to_range2() const;
 //};
 //
-//struct Pos2 {
+// struct Pos2 {
 //  float x;
 //  float y;
 //};
@@ -67,7 +84,7 @@ struct Guard {
   virtual ~Guard() {}
 };
 
-struct Drawable {
+struct Drawable:public Base_ {
   virtual void draw() const = 0;
   virtual ~Drawable() {}
 };
